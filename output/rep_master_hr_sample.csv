@@ -1,0 +1,14 @@
+rep_id,name_of_sales_rep,manager,sales_team,primary_territory,employment_status,vacancy_flag,vacancy_days
+REP_001,Abigail Thompson,Tracy Banks,Bravo,TERR_01,Active,0,0
+REP_002,Alan Ray,James Goodwill,Alfa,TERR_04,Exit,0,0
+REP_003,Anne Wu,Britanny Bold,Delta,TERR_07,Active,0,0
+REP_004,Daniel Gates,Alisha Cordwell,Charlie,TERR_01,Active,0,0
+REP_005,Erica Jones,James Goodwill,Alfa,TERR_01,Active,0,0
+REP_006,Jessica Smith,Britanny Bold,Delta,TERR_01,Active,0,0
+REP_007,Jimmy Grey,Alisha Cordwell,Charlie,TERR_06,Active,0,0
+REP_008,Mary Gerrard,Britanny Bold,Delta,TERR_07,Vacant,1,99
+REP_009,Morris Garcia,Tracy Banks,Bravo,TERR_08,Active,0,0
+REP_010,Sheila Stones,Britanny Bold,Delta,TERR_04,Active,0,0
+REP_011,Stella Given,Alisha Cordwell,Charlie,TERR_05,Active,0,0
+REP_012,Steve Pepple,Tracy Banks,Bravo,TERR_06,Active,0,0
+REP_013,Thompson Crawford,James Goodwill,Alfa,TERR_05,Exit,0,0

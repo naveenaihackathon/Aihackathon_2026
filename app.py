@@ -392,7 +392,7 @@ elif page == "📢 Promotion Analytics":
     st.header("📢 Promotional Activity Analytics")
     
     if len(promo_df) > 0:
-        uplift_col = get_col(promo_df, 'sales_uplift')
+        uplift_col = get_col(promo_df, 'sales_uplift', 'sales_uplift_%')
         impact_col = get_col(promo_df, 'promotion_impact')
         type_col = get_col(promo_df, 'promotion_type')
         
@@ -408,15 +408,13 @@ elif page == "📢 Promotion Analytics":
         
         st.divider()
         
-        if type_col:
-            by_type = promo_df.groupby(type_col).agg({
-                uplift_col: 'mean' if uplift_col else None,
-                type_col: 'count'
-            }).reset_index()
-            if uplift_col:
-                by_type.columns = [type_col, 'Avg_Uplift', 'Count']
-                fig = px.bar(by_type, x=type_col, y='Avg_Uplift', title="Uplift by Type", color='Avg_Uplift', color_continuous_scale='Greens')
-                st.plotly_chart(fig, use_container_width=True)
+        if type_col and uplift_col:
+            by_type = promo_df.groupby(type_col, as_index=False).agg(
+                Avg_Uplift=(uplift_col, 'mean'),
+                Count=(uplift_col, 'size'),
+            )
+            fig = px.bar(by_type, x=type_col, y='Avg_Uplift', title="Uplift by Type", color='Avg_Uplift', color_continuous_scale='Greens')
+            st.plotly_chart(fig, use_container_width=True)
         
         st.subheader("Promotion Details")
         st.dataframe(promo_df.head(20), use_container_width=True, hide_index=True)
