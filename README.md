@@ -255,6 +255,16 @@ flowchart LR
 
 The following screenshots are captured from the working Streamlit application and are included in this repository.
 
+## Hackathon Demonstration Video
+
+[Download or open the RepSense AI hackathon demonstration video](RepSense_AI_Hackathon_Demo.mp4)
+
+[Download the matching 10-slide PowerPoint presentation](RepSense_AI_Hackathon_Demo.pptx)
+
+The approximately 44-second captioned walkthrough presents the input data, preprocessing, operational data layers, feature engineering, Isolation Forest, Local Outlier Factor, business rules, hybrid risk scoring, output file, and all six dashboard pages.
+
+The PowerPoint follows the same story in 10 slides: title, input data, cleaning, operational context, features, ML detection, business rules, hybrid scoring, explainable output, and dashboard views.
+
 ### Executive Dashboard
 
 ![RepSense AI Executive Dashboard](dashboard-executive.png)
@@ -378,6 +388,19 @@ project/
 ├── config.py                          # Configuration & thresholds
 ├── requirements.txt                    # Python dependencies
 ├── README.md                          # This file
+├── PRESENTATION_CONTENT.md             # Presentation-ready project content
+├── KNOWLEDGE_BASE.html                 # Printable knowledge-base source
+├── RepSense_AI_Knowledge_Base.pdf      # Knowledge-base PDF, when generated
+├── SUBMISSION_DATA_README.md           # Hackathon sample-data guide
+├── input/
+│   └── pharma-data_sample.csv          # 1,000-row submission input sample
+├── output/
+│   ├── AI_rep_management_output_sample.csv
+│   ├── rep_master_hr_sample.csv
+│   ├── crm_activity_detail_sample.csv
+│   ├── promotional_activity_sample.csv
+│   ├── executive_dashboard_sample.csv
+│   └── critical_territories_sample.csv
 │
 ├── data/
 │   ├── raw/
