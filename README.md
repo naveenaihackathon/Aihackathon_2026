@@ -148,7 +148,7 @@ Severity:
 ### Output Files
 
 #### AI_rep_management_output.csv (Main Output)
-**960 territory-month records with complete risk analysis**
+**Current demo output: 8 territory-date records with complete risk analysis**
 - Territory & date
 - Sales metrics (Sales, Change %, Transactions, Customers)
 - HR metrics (Reps, Vacancies, Vacancy Days)
@@ -157,11 +157,139 @@ Severity:
 - Risk Scores: Sales Risk, CRM Risk, HCP Coverage Risk, Vacancy Risk, ML Risk, Business Risk, Final Risk
 - Output: Severity (Critical/Major/Minor), Risk_Reasons (text), AI_Recommendation (text)
 
+> The current demonstration run produces eight records because the available source data is reduced to one effective analysis date in the present processing path. A production run with a complete multi-month source would produce one record per territory and analysis period.
+
 #### critical_territories.csv
 Filtered view - only Critical severity territories for management focus
 
 #### executive_dashboard.csv
 Monthly aggregates - Total Sales, Territory Count, Average Risk, Total Vacancies, Critical Count
+
+---
+
+## Architecture Diagrams
+
+### End-to-End Data and Risk Workflow
+
+```mermaid
+flowchart LR
+    A[pharma-data.csv] --> B[preprocessing.py]
+    B --> C[Cleaned sales data]
+    C --> D[Territory-month features]
+    H[HR data] --> D
+    I[CRM data] --> D
+    J[Promotion data] --> D
+    D --> E[Isolation Forest]
+    D --> F[Local Outlier Factor]
+    E --> G[ML ensemble score]
+    F --> G
+    G --> K[Business rules]
+    K --> L[Hybrid risk score]
+    L --> M[Severity and explanations]
+    M --> N[AI_rep_management_output.csv]
+    N --> O[Streamlit dashboard]
+```
+
+### Application Components
+
+```mermaid
+graph TB
+    subgraph Inputs
+        S[Sales transactions]
+        H[HR and vacancy data]
+        C[CRM activity]
+        P[Promotions]
+    end
+    subgraph Processing
+        PP[preprocessing.py]
+        PL[pipeline.py]
+        CFG[config.py]
+    end
+    subgraph Outputs
+        CSV[Risk output CSVs]
+        UI[app.py Streamlit UI]
+        R[Management recommendations]
+    end
+    S --> PP
+    H --> PL
+    C --> PL
+    P --> PL
+    PP --> PL
+    CFG --> PL
+    PL --> CSV
+    CSV --> UI
+    UI --> R
+```
+
+### Production Deployment Architecture
+
+```mermaid
+flowchart TD
+    A[Sales, HR, CRM and promotion systems] --> B[Data warehouse or lake]
+    B --> C[Scheduled ETL and data validation]
+    C --> D[Feature store or analytical tables]
+    D --> E[Model scoring service]
+    E --> F[Risk score database]
+    F --> G[Streamlit dashboard and REST API]
+    G --> H[Managers, email, Teams and CRM alerts]
+```
+
+### Risk Scoring Flow
+
+```mermaid
+flowchart LR
+    A[Sales risk] --> F[Weighted final score]
+    B[CRM risk] --> F
+    C[HCP coverage risk] --> F
+    D[Vacancy risk] --> F
+    E[ML anomaly risk] --> F
+    F --> G{Severity}
+    G -->|0-39| H[Minor: monitor]
+    G -->|40-69| I[Major: review]
+    G -->|70-100| J[Critical: intervene]
+```
+
+> GitHub and several Markdown viewers render Mermaid diagrams directly. If your PowerPoint workflow does not render Mermaid, use the diagram structure as a blueprint for SmartArt or export the diagrams from a Mermaid-compatible editor.
+
+## Dashboard Screenshots
+
+The following screenshots are captured from the working Streamlit application and are included in this repository.
+
+### Executive Dashboard
+
+![RepSense AI Executive Dashboard](dashboard-executive.png)
+
+Shows total sales, representatives, vacancies, critical territories, average risk, risk distribution, top-risk territories, and trends.
+
+### AI Risk Monitor
+
+![RepSense AI Risk Monitor](risk-monitor.png)
+
+Shows territory risk scores, sales change, vacancies, CRM activity, HCP coverage, severity, risk reasons, and recommendations.
+
+### Territory Deep Dive
+
+![RepSense AI Territory Deep Dive](territory-deep-dive.png)
+
+Shows detailed territory metrics, status, risk explanations, recommendations, and time-series charts.
+
+### Rep Management
+
+![RepSense AI Rep Management](rep-management.png)
+
+Shows the representative directory, employment status, active representatives, vacancies, and sales teams.
+
+### Promotion Analytics
+
+![RepSense AI Promotion Analytics](promotion-analytics.png)
+
+Shows promotion count, average uplift, high-impact promotions, uplift by promotion type, and promotion details.
+
+### AI Assistant
+
+![RepSense AI Assistant](ai-assistant.png)
+
+Shows the keyword-based assistant for questions about high-risk territories, vacancies, sales declines, and CRM activity.
 
 ---
 
@@ -223,7 +351,7 @@ python pipeline.py
 # This will create/update:
 # - pharma_sales_cleaned.csv (cleaned sales data)
 # - rep_master_hr.csv (HR data)
-# - crm_activity_detail.csv (daily CRM data)
+# - crm_activity_detail.csv (CRM activity detail)
 # - crm_monthly_analysis.csv (monthly aggregated)
 # - promotional_activity.csv (promotions)
 # - AI_rep_management_output.csv (main output with risk scores)
@@ -340,7 +468,7 @@ Selected features are:
 
 ### Current Limitations
 
-1. **Monthly Aggregation**: Loses intra-month variation. Use daily CRM data for finer detail.
+1. **Monthly Aggregation**: Loses intra-month variation. Use detailed CRM activity data for finer analysis.
 2. **No Forecasting**: Model explains current state, not predicts future. ARIMA/Prophet could extend this.
 3. **No Geo-Spatial**: Doesn't consider geographic clustering of territories.
 4. **Static Thresholds**: Thresholds don't adapt by territory type/region. Could use ML-learned thresholds.
